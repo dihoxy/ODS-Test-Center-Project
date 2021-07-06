@@ -4,4 +4,4 @@
 SELECT "subject", ROUND(AVG("actual_time")) AS "avg_time_used_per_exam"
 FROM public."Regular_Semester_Exams"
 GROUP BY("subject")
-ORDER BY count("actual_time") DESC;
+ORDER BY AVG("actual_time") DESC;
