@@ -1,4 +1,4 @@
-SQL Queries
+--SQL Queries
 
 --Average amount of time used per subject
 SELECT "subject", ROUND(AVG("actual_time")) AS "avg_time_used_per_exam"
