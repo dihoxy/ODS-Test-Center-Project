@@ -3,7 +3,7 @@
 ## *Scope Overview*
 
 1. Stakeholder wants to see trends in nighttime and daytime testing in respect to volume
-2. Stakeholder wants to examine trends in subject and the amount of time used on the exam
+2. Stakeholder wants to examine trends in subject and any correlation for the amount of time used on the exam
 3. Stakeholder is seeking recommendations in staffing for student-workers
 
 
