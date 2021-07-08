@@ -25,7 +25,7 @@
 
 1. '*actual_time*' values should not be zero. *Instances of this are most likely due to testing coordinator error when processing the exam in the portal*
 2. '*actual_times*' that go over the '*allotted_time*' by more than 5% should be dropped. *It is likely that the testing coordinator forgot to check the student out of the portal and since there is no way of knowing how long they actually took, the data can't be relied*
-3. '*actual_times*' that exceeded the '*allotted_times*' but by not more than 5% should be replaced by the actual time. The '*actual_end*' should also relfect the correct time. *This is the stakeholder's preference. We are not concerned with the rate at which student's go over their allotted time, nor are we concerned with ODS process*
+3. '*actual_times*' that exceeded the '*allotted_times*' but by not more than 5% should be replaced by the allotted time. The '*actual_end*' should also relfect the correct time. *This is the stakeholder's preference. We are not concerned with the rate at which student's go over their allotted time, nor are we concerned with ODS process*
 4. Outliers should be removed unless they can be verified
 5. Night-Time testing is considered any exams that start after 16:45
 6. Final and regular semester exams should be seperated considering the unique circumstances that ODS sees with final exams
