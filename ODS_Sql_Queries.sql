@@ -28,3 +28,32 @@ FROM public."Regular_Semester_Exams"
 WHERE "start_time" > '16:45:00'
 GROUP BY ("subject")
 ORDER BY count("index") DESC;
+
+
+
+--Creating Views to Work with Business Objective
+
+CREATE VIEW [semester_name] AS
+	SELECT "index", "subject", "section", "proctor", "first_entered" AS "first_entered_on",
+		"days_requested_submitted_in_advance" AS "number_of_days_entered_in_advance",
+		("exam_date" + "start_time") AS "scheduled_start", ("exam_date" + "end_time") AS "scheduled_end", 
+		("exam_date" + "actual_start") AS "actual_start", ("exam_date" + "actual_end") AS "actual_end",
+		"name_of_day", "allotted_time", "actual_time", "exam_cancelled", "no_show", "breaks_during_exams", 
+		"extra_time_1.50x", "extra_time_2.00x", "noScantronExam", "readerforExams"
+	FROM public."Regular_Semester_Exams"
+		WHERE ("exam_date" > 'date_range') AND ("exam_date" < 'date_range');
+
+
+--Percentage of courses that were past 4:45 p.m. during Fall 2019
+
+--I had to cast the result as a numeric and then round it to the nearest 2 places. Must be done with numeric data type. Can't be done
+--with float
+--Syntax shorthand: "select the number of exams, the count of all that meets the 'where' expression and then select the count of every item in the VIEW
+--and round the resulting percentage to two places. Group by the course, and order by the count of subjects that meet the 'where'
+--condition"
+SELECT "subject", count("index") AS number_of_exams, round(count(*)*100/(SELECT count(*) FROM public."fall_19_regular")::numeric, 2)
+	AS "% of total_exams"
+FROM public."fall_19_regular" 
+WHERE "scheduled_start"::time > '16:45'::time
+GROUP BY "subject"
+ORDER BY count("index") DESC;
