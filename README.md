@@ -13,8 +13,9 @@
 
 1. Summer 2019 was the first semester that the ODS portal was used but transitioning from an older system
 2. COVID 19 - Half of the semester for Spring '20 was cancelled due to the pandemic; no exams for Summer '20; UA operated at reduced capacity for both Fall '20 and Spring '21 semesters
-3. Online Exams are no longer being administered as of Fall 20 at ODS
-4. Indicators (i.e., student, instructor, course number) that might reveal additional insights are protected information and cannot be used in the analysis
+3. There is only one semester that contains relevant final exam data; this is due to Covid-19 and university restrictions at the time.
+4. Online Exams are no longer being administered as of Fall 20 at ODS
+5. Indicators (i.e., student, instructor, course number) that might reveal additional insights are protected information and cannot be used in the analysis
 
 ## *Dealing with the Limitations*
 
