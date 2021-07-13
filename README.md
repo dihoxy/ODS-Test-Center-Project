@@ -34,4 +34,5 @@
 
 ## *Notes*
 
-When the allotted_time *cannot be verified*, it means that the instructor did not specifiy it in the ods portal. When we went to verify times for allotted_time outliers, we tried to either use the time specified on the agreement, impute with another exam in the same subject, infer based off a similiar subject, or we dropped the exam due to lack of information
+1. When the allotted_time *cannot be verified*, it means that the instructor did not specifiy it in the ods portal. When we went to verify times for allotted_time outliers, we tried to either use the time specified on the agreement, impute with another exam in the same subject, infer based off a similiar subject, or we dropped the exam due to lack of information
+2. Null values in 'actual_time' correspond to an exam that was cancelled or the student did not show. I plan on creating views in PostgreSQL without these records to give the stakeholder a clearer view of testing activity without these rows.
