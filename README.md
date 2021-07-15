@@ -29,8 +29,8 @@
 3. '*actual_times*' that exceeded the '*allotted_times*' but by not more than 5% should be replaced by the allotted time. The '*actual_end*' should also relfect the correct time. *This is the stakeholder's preference. We are not concerned with the rate at which student's go over their allotted time, nor are we concerned with ODS process*
 4. Outliers should be removed unless they can be verified
 5. Night-Time testing is considered any exams that start after 16:45
-6. Final and regular semester exams should be seperated considering the unique circumstances that ODS sees with final exams
-7. We should not include data from Spring 20 semester that resulted in an exam scheduled but cancelled due to covid
+6. Final and regular semester exams should be seperated considering the unique circumstances that ODS sees with final exams (in seperate Views within Postgres)
+8. We should not include data from Spring 20 semester that resulted in an exam scheduled but cancelled due to covid
 
 ## *Notes*
 
