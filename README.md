@@ -24,16 +24,16 @@
 
 ## *Constraints*
 
-1. '*actual_time*' values should not be zero. *Instances of this are most likely due to testing coordinator error when processing the exam in the portal*
-2. '*actual_times*' that go over the '*allotted_time*' by more than 5% should be dropped. *It is likely that the testing coordinator forgot to check the student out of the portal and since there is no way of knowing how long they actually took, the data can't be relied*
-3. '*actual_times*' that exceeded the '*allotted_times*' but by not more than 5% should be replaced by the allotted time. The '*actual_end*' should also relfect the correct time. *This is the stakeholder's preference. We are not concerned with the rate at which student's go over their allotted time, nor are we concerned with ODS process*
+1. '*actual_time*' values should not be zero. *Instances of this are most likely due to testing coordinator error when processing the exam in the portal*. There should be a value greater than zero or null. All else will be removed from the dataset
+2. '*actual_times*' that go over the '*allotted_time*' by more than 10 mins should be dropped. *It is likely that the testing coordinator forgot to check the student out of the portal and since there is no way of knowing how long they actually took, the data can't be relied*
+3. '*actual_times*' that exceeded the '*allotted_times*' but by not more than 10 mins should be replaced by the allotted time. The '*actual_end*' should also relfect the correct time. *This is the stakeholder's preference. We are not concerned with the rate at which student's go over their allotted time, nor are we concerned with ODS process*
 4. Outliers should be removed unless they can be verified
 5. Night-Time testing is considered any exams that start after 16:45
 6. Final and regular semester exams should be seperated considering the unique circumstances that ODS sees with final exams (in seperate Views within Postgres)
-8. We should not include data from Spring 20 semester that resulted in an exam scheduled but cancelled due to covid
+8. We should not include data from Spring 20 semester that resulted in an exam scheduled but cancelled due to covid in Spring 2020
 
 ## *Notes*
 
 1. When the allotted_time *cannot be verified*, it means that the instructor did not specifiy it in the ods portal. When we went to verify times for allotted_time outliers, we tried to either use the time specified on the agreement, impute with another exam in the same subject, infer based off a similiar subject, or we dropped the exam due to lack of information
 2. Null values in 'actual_time' correspond to an exam that was cancelled or the student did not show. I plan on creating views in PostgreSQL without these records to give the stakeholder a clearer view of testing activity without these rows.
-3. I originally planned on creating two seperate dataframes that seperates final exams from regular exams, but I am now thinking that is probably more efficient to keep it as one dataframe and create seperate views for final exams and regular exams in PostgreSQL. I will remove obvious outliers (i.e., the exams with 5070 minute allottments) in Jupyter, then process the remaining outliers in PostgreSQL. By using Views, we can keep the orginally dataset (sans extreme and obvious outliers) intact. That way, should the stakeholder want to analyze data not contained within the original scope, we can still access that data.
+4. I originally planned on creating two seperate dataframes that seperates final exams from regular exams, but I am now thinking that is probably more efficient to keep it as one dataframe and create seperate views for final exams and regular exams in PostgreSQL. I will remove obvious outliers (i.e., the exams with 5070 minute allottments) in Jupyter, then process the remaining outliers in PostgreSQL. By using Views, we can keep the orginally dataset (sans extreme and obvious outliers) intact. That way, should the stakeholder want to analyze data not contained within the original scope, we can still access that data.
