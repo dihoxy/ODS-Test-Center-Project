@@ -37,8 +37,3 @@
 1. When the allotted_time *cannot be verified*, it means that the instructor did not specifiy it in the ods portal. When we went to verify times for allotted_time outliers, we tried to either use the time specified on the agreement, impute with another exam in the same subject, infer based off a similiar subject, or we dropped the exam due to lack of information
 2. Null values in 'actual_time' correspond to an exam that was cancelled or the student did not show. I plan on creating views in PostgreSQL without these records to give the stakeholder a clearer view of testing activity without these rows.
 4. I originally planned on creating two seperate dataframes that seperates final exams from regular exams, but I am now thinking that is probably more efficient to keep it as one dataframe and create seperate views for final exams and regular exams in PostgreSQL. I will remove obvious outliers (i.e., the exams with 5070 minute allottments) in Jupyter, then process the remaining outliers in PostgreSQL. By using Views, we can keep the orginally dataset (sans extreme and obvious outliers) intact. That way, should the stakeholder want to analyze data not contained within the original scope, we can still access that data.
-
-# Changelog
-**07/20/2021**
-1. *Created pull request in VCS*
-2. **
