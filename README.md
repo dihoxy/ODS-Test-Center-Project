@@ -47,5 +47,7 @@
 *07/21/2021*
 1. In 'Handling Ouliers' researched and replaced 4 values (at indices: 3279, 4172, 7229, 8854) with correct values from the ODS portal; dropped 7237 because it had no reference in the portal
 2. Dropped 1668 instances of scheduled exams that never took place due to the onset of COVID-19
-3. Expanded scope of the filter in 'Handling outliers' to include alle 
+3. Expanded scope of the filter in 'Handling outliers' to include all exams under 8 minutes. Used a groupby object to compare actual_times to that of aggregated averages of times in the same subject/section. Dropped necessary rows
+4. Created new version of 'Handling outliers'(v02) and removed v01
+5. Discovered 80 rows where there no recorded 'actual_time' and the instance was not a no show and not cancelled. ***These need to be dropped***
 
