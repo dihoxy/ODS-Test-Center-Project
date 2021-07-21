@@ -43,3 +43,7 @@
 1. In 'Handling Outliers' notebook - Accessed and set values with zero *actual_time* to *start_time*
 2. Dropped indices 1001, 2896, 9314 because their check-out came before their *start_time* and *end_time* (likely due to TC error)
 3. Noticed about 120 rows where the times don't make sense. Like I stated above, this is likely due to testing coordinator error (checking the student and out at check in); however, because some exams are only as little as 8 mins in length, we need to be careful which exams we drop. I believe setting threshold is the appropriate course of action
+
+*07/21/2021*
+1. In 'Handling Ouliers' researched and replaced 4 values (at indices: 3279, 4172, 7229, 8854) with correct values from the ODS portal; dropped 7237 because it had no reference in the portal
+2. Dropped 1668 instances of scheduled exams that never took place due to the onset of COVID-19
