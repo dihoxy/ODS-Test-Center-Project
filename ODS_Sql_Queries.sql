@@ -1,5 +1,5 @@
 --Loading CSV With '/copy'
-\copy public."Final_Exams"("index", "subject","section","exam_date","proctor","room_number","start_time","end_time","actual_start","actual_end","first_entered","fileUploaded","received_as_paper_copy","rescheduled","breaks_during_exams","extra_time_1.50x","extra_time_2.00x","makeup_acoommodation","noScantronExam","readerforExams","allotted_time","actual_time","exam_cancelled","no_show","days_requested_submitted_in_advance","name_of_day") FROM 'C:\Users\musia\DataAnalysis\Projects\ODS Test Center\Test-Center-Analysis-main\ODS-Test-Center-Project-main\ODS-Test-Center-Project-main\ODS-Test-Center-Project-main\PostgrExFinals071021.csv' DELIMITER ','CSV HEADER;
+\copy public."Final_Exams"("index", "subject","section","exam_date","proctor","room_number","start_time","end_time","actual_start","actual_end","first_entered","fileUploaded","received_as_paper_copy","rescheduled","breaks_during_exams","extra_time_1.50x","extra_time_2.00x","makeup_acoommodation","noScantronExam","readerforExams","allotted_time","actual_time","exam_cancelled","no_show","days_requested_submitted_in_advance","name_of_day") FROM 'C:\Users\amvanslambrouck\Desktop\ODS Test Center Docs\ODS-Test-Center-Project-main\ODS-Test-Center-Project-dihoxy-version-2\postgres_export_ods_v03.csv' DELIMITER ','CSV HEADER;
 
 --Creating Tables
 CREATE TABLE public."ods_exams"
