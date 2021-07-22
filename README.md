@@ -53,4 +53,9 @@
 3. Expanded scope of the filter in 'Handling outliers' to include all exams under 8 minutes. Used a groupby object to compare actual_times to that of aggregated averages of times in the same subject/section. Dropped necessary rows (**Note this fixes the issue from number 3 on 07/20/2021**)
 4. Created new version of 'Handling outliers'(v02) and removed v01
 5. Discovered 80 rows where there no recorded 'actual_time' and the instance was not a no show and not cancelled. ***These need to be dropped***
-
+***
+*07/22/2021*
+1. Rows where actual_time was null and exam was not a no_show, and not cancelled were dropped (80 rows)
+2. Converted dytpes of columns to appropriate dtypes
+3. Filled all actual_time nulls with 0
+4. Converted actual_time column to 'int64'
