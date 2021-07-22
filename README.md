@@ -16,11 +16,14 @@
 3. There is only one semester that contains relevant final exam data; this is due to Covid-19 and university restrictions at the time.
 4. Online Exams are no longer being administered as of Fall 20 at ODS
 5. Indicators (i.e., student, instructor, course number) that might reveal additional insights are protected information and cannot be used in the analysis
+6. The check-in and check-out process is not automated. There will be instances where the student was simply marked as completed (i.e., no 'actual_time' recorded), not checked-in/out properly, etc. 
 
 ## *Dealing with the Limitations*
 
 1. There might not be enough data to evaluate semester to semester data, but there is enough data to evaluate trends in week-to-week data, or evening vs. day time testing, which is an objective that our stakeholder has indicated. It is a matter of putting the data in the right context
 2. The scripts used in this project can be used to load in new, more complete data as UA returns to full operations
+3. ShareDrive should eventually give us access to more data from previous semesters once access is granted
+4. When dealing with the anomalies, it's important to identify those exams in which data might be imputed. Since some of the data used to do this is protected, this process may not be reflected in this project. I will do my best to detail my thought process that went into deciding when something should be imputed or dropped
 
 ## *Constraints*
 
