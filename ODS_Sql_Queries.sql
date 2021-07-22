@@ -1,7 +1,9 @@
 --Loading CSV With '/copy'
-\copy public."ods_exams"("index", "subject","section","exam_date","proctor","room_number","start_time","end_time","actual_start","actual_end","first_entered","fileUploaded","received_as_paper_copy","rescheduled","breaks_during_exams","extra_time_1.50x","extra_time_2.00x","makeup_acoommodation","noScantronExam","readerforExams","allotted_time","actual_time","exam_cancelled","no_show","requested_in_advance","name_of_day") FROM 'C:\Users\amvanslambrouck\Desktop\ODS Test Center Docs\ODS-Test-Center-Project-main\ODS-Test-Center-Project-main\postgres_export_ods_v04.csv' DELIMITER ','CSV HEADER;
+\copy public."ods_exams"("index", "subject","section","exam_date","proctor","room_number","start_time","end_time","actual_start","actual_end","first_entered","fileUploaded","received_as_paper_copy","rescheduled","breaks_during_exams","extra_time_1.50x","extra_time_2.00x","makeup_acoommodation","noScantronExam","readerforExams","allotted_time","actual_time","exam_cancelled","no_show","requested_in_advance","name_of_day") FROM 'C:\Users\amvanslambrouck.UA-NET\Desktop\ODS Project\ODS-Test-Center-Project-main\postgres_export_ods_v05.csv' DELIMITER ','CSV HEADER;
 
---Creating Tables
+
+
+----Creating Tables and altering tables
 CREATE TABLE public."ods_exams"
 ("index" BIGINT PRIMARY KEY, "subject" VARCHAR(10) NOT NULL,"section" varchar(5) NOT NULL,"exam_date" DATE NOT NULL,
  "proctor" VARCHAR(35) NOT NULL,"room_number" VARCHAR(50) NOT NULL,"start_time" TIMESTAMP NOT NULL,
@@ -13,31 +15,55 @@ CREATE TABLE public."ods_exams"
  "requested_in_advance" BIGINT NOT NULL,"name_of_day" VARCHAR(10));
 
 
-
-
---SQL Queries
+--Alter datatype of 'actual_time' to bigint to match datatype of 'allotted_time'
+ALTER TABLE 
+	ods_exams
+ALTER COLUMN 
+	actual_time
+SET DATA TYPE 
+	bigint;
 
 
 --Delete Test Case
-DELETE FROM ods_exams
-WHERE "subject" = 'TEST';
+DELETE FROM 
+	ods_exams
+WHERE 
+	"subject" = 'TEST';
+
+
+
+----SQL Queries
+
+
+--Group by date for exams that were past 4:45 p.m. and aggregate the mean for allotted and actual time
+--Filter out any 0 values for actual_time
+SELECT 
+	exam_date, round(avg(allotted_time), 0) AS avg_allottment, round(avg(actual_time), 0) AS avg_actual
+FROM 
+	ods_exams
+WHERE 
+	(CAST(start_time AS TIME) > '14:45:00') AND (actual_time <> 0)
+GROUP BY 
+	exam_date
+ORDER BY 
+	exam_date ASC;
+
+
 
 --Average amount of time used per subject
-SELECT "subject", ROUND(AVG("actual_time")) AS "avg_time_used"
-FROM public."ods_exams"
-GROUP BY("subject")
-ORDER BY count("actual_time") DESC;
-
---Average Start Time and End Time for Evening Exams (Exams Past 4:45 p.m.)
-SELECT "subject", count("index"), avg("start_time"), avg("end_time")
-FROM public."ods_exams"
-WHERE "start_time" > '16:45:00'
-GROUP BY ("subject")
-ORDER BY count("index") DESC;
+SELECT 
+	subject, round(avg(actual_time)) AS avg_time_used
+FROM 
+	ods_exams
+GROUP BY 
+	subject
+ORDER BY 
+	avg(actual_time) DESC;
 
 
 
---Creating Views to Work with Business Objective
+
+----Creating Views to Work with Business Objective
 
 CREATE VIEW [semester_name] AS
 	SELECT "index", "subject", "section", "proctor", "first_entered" AS "first_entered_on",
@@ -51,7 +77,6 @@ CREATE VIEW [semester_name] AS
 
 
 --Percentage of courses that were past 4:45 p.m. during Fall 2019
-
 --I had to cast the result as a numeric and then round it to the nearest 2 places. Must be done with numeric data type. Can't be done
 --with float
 --Syntax shorthand: "select the number of exams, the count of all that meets the 'where' expression and then select the count of every item in the VIEW
