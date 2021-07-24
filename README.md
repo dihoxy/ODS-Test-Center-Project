@@ -59,3 +59,7 @@
 2. Converted dytpes of columns to appropriate dtypes
 3. Filled all actual_time nulls with 0
 4. Converted actual_time column to 'int64'
+
+***
+07/24/2021
+1. Created PostgreSQL View for time series data, grouping by date and aggregating the sums for day and night exams
