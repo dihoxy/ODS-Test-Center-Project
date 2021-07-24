@@ -1,5 +1,14 @@
 ----+--Loading Data----+--
-\copy public."ods_exams"("index", "subject","section","exam_date","proctor","room_number","start_time","end_time","actual_start","actual_end","first_entered","fileUploaded","received_as_paper_copy","rescheduled","breaks_during_exams","extra_time_1.50x","extra_time_2.00x","makeup_acoommodation","noScantronExam","readerforExams","allotted_time","actual_time","exam_cancelled","no_show","requested_in_advance","name_of_day") FROM 'C:\Users\musia\DataAnalysis\Projects\ODS Test Center\ODS-Test-Center-Project-main\postgres_export_ods_v05.csv' DELIMITER ','CSV HEADER;
+\copy public."ods_exams"("index", "subject","section","exam_date","proctor",
+			 "room_number","start_time","end_time","actual_start","actual_end",
+			 "first_entered","fileUploaded","received_as_paper_copy","rescheduled",
+			 "breaks_during_exams","extra_time_1.50x","extra_time_2.00x",
+			 "makeup_acoommodation","noScantronExam","readerforExams",
+			 "allotted_time","actual_time","exam_cancelled","no_show",
+			 "requested_in_advance","name_of_day")
+			 FROM 
+			 'C:\Users\musia\DataAnalysis\Projects\ODS Test Center\ODS-Test-Center-Project-main\postgres_export_ods_v05.csv'
+			 DELIMITER ','CSV HEADER;
 
 ----+----+------+------+
 
