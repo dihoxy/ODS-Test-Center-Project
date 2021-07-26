@@ -94,6 +94,15 @@ WHERE (EXTRACT (MONTH FROM exam_date) = 12 --Fall '19 Finals Month
 	   OR (EXTRACT (MONTH FROM exam_date) = 4 --Spring '21 Finals Month
 		  AND EXTRACT (DAY FROM exam_date) >= 26) --Spring '21 Finals Day
 
+----Select the percentage mins each instance took of the total number of minutes for that day
+
+SELECT exam_date,
+actual_time,
+sum(actual_time) OVER (PARTITION BY exam_date) AS num_act_tot_exam_mins_per_day,
+actual_time*100/sum(actual_time::FLOAT) OVER (PARTITION BY exam_date) AS percent_total_act_mins_day
+FROM ods_exams
+WHERE actual_time <>0; --Filters out no shows
+
 
 
 
