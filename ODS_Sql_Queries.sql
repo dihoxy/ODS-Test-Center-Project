@@ -1,15 +1,5 @@
 ----+--Loading Data----+--
-\copy public."ods_exams"("index", "subject","section","exam_date",
-			 "proctor","room_number","start_time",
-			 "end_time","actual_start","actual_end",
-			 "first_entered","fileUploaded",
-			 "received_as_paper_copy","rescheduled",
-			 "breaks_during_exams","extra_time_1.50x",
-			 "extra_time_2.00x","makeup_acoommodation","noScantronExam",
-			 "readerforExams","allotted_time","actual_time","exam_cancelled",
-			 "no_show","requested_in_advance","name_of_day") 
-			 FROM 'C:\Users\musia\DataAnalysis\Projects\ODS Test Center\ODS-Test-Center-Project-main\postgres_export_ods_v05.csv' 
-			 DELIMITER ','CSV HEADER;
+\copy public."ods_exams"("index", "subject","section","exam_date","proctor","room_number","start_time","end_time","actual_start","actual_end","first_entered","fileUploaded","received_as_paper_copy","rescheduled","breaks_during_exams","extra_time_1.50x","extra_time_2.00x","makeup_acoommodation","noScantronExam","readerforExams","allotted_time","actual_time","exam_cancelled","no_show","requested_in_advance","name_of_day") FROM 'C:\Users\musia\DataAnalysis\Projects\ODS Test Center\ODS-Test-Center-Project-main\postgres_export_ods_v06.csv' DELIMITER ','CSV HEADER;
 
 ----+----+------+------+
 
@@ -19,9 +9,9 @@ CREATE TABLE public."ods_exams"
 ("index" SERIAL PRIMARY KEY, "subject" VARCHAR(10) NOT NULL,"section" varchar(5) NOT NULL,"exam_date" DATE NOT NULL,
  "proctor" VARCHAR(35) NOT NULL,"room_number" VARCHAR(50) NOT NULL,"start_time" TIMESTAMP NOT NULL,
  "end_time" TIMESTAMP NOT NULL,"actual_start" TIMESTAMP NOT NULL,"actual_end" TIMESTAMP NOT NULL,"first_entered" TIMESTAMP NOT NULL,
- "fileUploaded" BOOLEAN NOT NULL,"received_as_paper_copy" BOOLEAN NOT NULL,"rescheduled" BIGINT NOT NULL,
- "breaks_during_exams" BOOLEAN NOT NULL,"extra_time_1.50x" BOOLEAN NOT NULL,"extra_time_2.00x" BOOLEAN NOT NULL,
- "makeup_acoommodation" BOOLEAN NOT NULL,"noScantronExam" BOOLEAN NOT NULL,"readerforExams" BOOLEAN NOT NULL,
+ "fileUploaded" VARCHAR(3),"received_as_paper_copy" VARCHAR(3) NOT NULL,"rescheduled" BIGINT NOT NULL,
+ "breaks_during_exams" VARCHAR(3) NOT NULL,"extra_time_1.50x" VARCHAR(3) NOT NULL,"extra_time_2.00x" VARCHAR(3) NOT NULL,
+ "makeup_acoommodation" VARCHAR(3) NOT NULL,"noScantronExam" VARCHAR(3) NOT NULL,"readerforExams" VARCHAR(3) NOT NULL,
  "allotted_time" BIGINT NOT NULL,"actual_time" FLOAT,"exam_cancelled" BOOLEAN NOT NULL,"no_show" BOOLEAN NOT NULL,
  "requested_in_advance" BIGINT NOT NULL,"name_of_day" VARCHAR(10));
 
@@ -36,6 +26,35 @@ SET DATA TYPE bigint;
 DELETE FROM ods_exams
 WHERE "subject" = 'TEST';
 
+
+
+--Drop 'fileUploaded' since it is largely irrelevant to the business objective
+ALTER TABLE ods_exams
+	DROP COLUMN "fileUploaded"
+
+--Create a new column to store final_exam boolean indicator
+ALTER TABLE ods_exams
+	ADD COLUMN final_exam
+
+UPDATE ods_exams
+	SET final_exam = 'f';
+
+ALTER TABLE ods_exams
+	ALTER COLUMN final_exam SET NOT NULL;
+	
+ALTER TABLE ods_exams
+	ALTER COLUMN final_exam SET DEFAULT FALSE;
+
+
+--Update final_exams to indicate final_exam status
+UPDATE ods_exams
+	SET final_exam = CASE
+		WHEN (exam_date BETWEEN '2019-08-01' AND '2019-08-03') THEN true
+		WHEN (exam_date BETWEEN '2019-12-09' AND '2019-12-13-') THEN true
+		WHEN (exam_date BETWEEN '2021-04-26' AND '2021-04-30') THEN true
+		WHEN (exam_date = '2019-11-22' AND subject = 'GBA') THEN true
+		ELSE FALSE
+	END;
 ----+------+------+----+
 
 ----+--Creating SQL VIEWS for analysis----+--
@@ -86,6 +105,7 @@ ORDER BY avg(actual_time) DESC;
 
 ----Select Month, Day of Final Exams
 --There is only data for FAll 19 exams, and Spring 21 exams in the dataset
+
 SELECT EXTRACT (MONTH FROM exam_date) AS "month", 
 		EXTRACT (DAY FROM exam_date) AS "day"
 FROM ods_exams
@@ -93,16 +113,6 @@ WHERE (EXTRACT (MONTH FROM exam_date) = 12 --Fall '19 Finals Month
 	   AND EXTRACT (DAY FROM exam_date) >= 9) --Fall '19 Finals Day
 	   OR (EXTRACT (MONTH FROM exam_date) = 4 --Spring '21 Finals Month
 		  AND EXTRACT (DAY FROM exam_date) >= 26) --Spring '21 Finals Day
-		  
-		  
-
-----Select the percentage mins each instance took of the total number of minutes for that day
-SELECT exam_date,
-actual_time,
-sum(actual_time) OVER (PARTITION BY exam_date) AS num_act_tot_exam_mins_per_day,
-actual_time*100/sum(actual_time::FLOAT) OVER (PARTITION BY exam_date) AS percent_total_act_mins_day
-FROM ods_exams
-WHERE actual_time <>0; --Filters out no shows
 
 
 
