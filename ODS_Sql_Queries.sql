@@ -53,7 +53,7 @@ UPDATE ods_exams
 		WHEN (exam_date BETWEEN '2019-08-01' AND '2019-08-03') THEN true
 		WHEN (exam_date BETWEEN '2019-12-09' AND '2019-12-13-') THEN true
 		WHEN (exam_date BETWEEN '2021-04-26' AND '2021-04-30') THEN true
-		WHEN (exam_date = '2019-11-22' AND subject = 'GBA') THEN true
+		WHEN (exam_date = '2019-11-22' AND subject = 'GBA') THEN true --Since GBAs finals are taken before final schedule. This happened only once in the dataset
 		ELSE FALSE
 	END;
 ----+------+------+----+
