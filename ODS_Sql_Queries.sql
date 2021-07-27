@@ -32,7 +32,7 @@ WHERE "subject" = 'TEST';
 ALTER TABLE ods_exams
 	DROP COLUMN "fileUploaded"
 
---Create a new column to store final_exam boolean indicator
+----Create a new column to store final_exam boolean indicator
 ALTER TABLE ods_exams
 	ADD COLUMN final_exam
 
@@ -46,7 +46,8 @@ ALTER TABLE ods_exams
 	ALTER COLUMN final_exam SET DEFAULT FALSE;
 
 
---Update final_exams to indicate final_exam status
+----Update final_exams to indicate final_exam status
+--I use the university's registra's office final exam schedule to set the parameters
 UPDATE ods_exams
 	SET final_exam = CASE
 		WHEN (exam_date BETWEEN '2019-08-01' AND '2019-08-03') THEN true
