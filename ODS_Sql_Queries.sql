@@ -62,9 +62,7 @@ UPDATE ods_exams
 ----Time Series
 --Here I join two common table expressions(CTE) to query the number of exams for each 
 --date for both day and night time testing respectively
-
 --I wonder if there is a more efficient way to do this...
-
 CREATE VIEW ods_time_series AS(
 WITH nightExams AS (
 	SELECT exam_date, COUNT(start_time) AS cnt_night_tests
@@ -84,6 +82,19 @@ ON dayExams.exam_date = nightExams.exam_date
 GROUP BY dayExams.exam_date, dayExams.cnt_day_tests, nightExams.cnt_night_tests
 ORDER BY dayExams.exam_date ASC);
 
+----Final Exams View
+CREATE VIEW final_exam AS (
+	SELECT *
+	FROM ods_exams
+	WHERE final_exam = TRUE
+	ORDER BY exam_date);
+
+----Regular Semester View
+CREATE VIEW reg_exams AS (
+	SELECT *
+	FROM ods_exams
+	WHERE final_exam = False
+	ORDER BY exam_date);
 
 ----+------+------+------+
 
