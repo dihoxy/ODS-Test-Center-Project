@@ -63,3 +63,10 @@
 ***
 07/24/2021
 1. Created PostgreSQL View for time series data, grouping by date and aggregating the sums for day and night exams
+***
+07/27/2021
+1. Created Views for finals and regular exams
+2. Connected local server to Tableau for visualizations
+***
+07/29/2021
+1. Started new Jupyter notebook 'ODS Project Analysis' for further analysis in Python
