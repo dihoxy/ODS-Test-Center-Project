@@ -92,7 +92,7 @@ dayExams AS (
 SELECT dayExams.exam_date, dayExams.cnt_day_tests, nightExams.cnt_night_tests,
 	(dayExams.cnt_day_tests + nightExams.cnt_night_tests) AS tot_num_tests
 FROM dayExams
-OUTER JOIN nightExams
+FULL OUTER JOIN nightExams
 ON dayExams.exam_date = nightExams.exam_date
 GROUP BY dayExams.exam_date, dayExams.cnt_day_tests, nightExams.cnt_night_tests
 ORDER BY dayExams.exam_date ASC);
