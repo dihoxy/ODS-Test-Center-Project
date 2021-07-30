@@ -70,3 +70,9 @@
 ***
 *07/29/2021*
 1. Started new Jupyter notebook 'ODS Project Analysis' for further analysis in Python
+***
+*07/30/2021*
+
+1.Add column 'semester' to indicate semester and year
+
+2.Integrated project into Pycharm IDE

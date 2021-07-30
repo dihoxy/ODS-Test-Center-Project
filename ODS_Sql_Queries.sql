@@ -97,6 +97,17 @@ ON dayExams.exam_date = nightExams.exam_date
 GROUP BY dayExams.exam_date, dayExams.cnt_day_tests, nightExams.cnt_night_tests
 ORDER BY dayExams.exam_date ASC);
 
+
+---Create View to add in semester indicator
+--I use a left join to join the view ods_time_series and ods_exams to get the column
+--I also make good use of aliasing here
+CREATE VIEW series AS (
+SELECT series.exam_date, series.tot_num_tests, series.cnt_day_tests, series.cnt_night_tests,
+       ods.semester
+FROM ods_time_series AS series
+LEFT JOIN ods_exams AS ods
+ON series.exam_date = ods.exam_date);
+
 ----Final Exams View
 CREATE VIEW final_exam AS (
 	SELECT *
