@@ -35,15 +35,28 @@ ALTER TABLE ods_exams
 ----Create a new column to store final_exam boolean indicator
 ALTER TABLE ods_exams
 	ADD COLUMN final_exam
-
 UPDATE ods_exams
 	SET final_exam = 'f';
-
 ALTER TABLE ods_exams
 	ALTER COLUMN final_exam SET NOT NULL;
-	
 ALTER TABLE ods_exams
 	ALTER COLUMN final_exam SET DEFAULT FALSE;
+
+----Add a new column to indicate Fall, Spring, or summer
+ALTER TABLE ods_exams
+    ADD COLUMN semester CHAR(2);
+UPDATE ods_exams
+    SET semester = CASE
+        WHEN (exam_date BETWEEN '2019-05-01' AND '2019-08-03') THEN 'SU 19'
+        WHEN (exam_date BETWEEN '2019-08-05' AND '2019-12-20') THEN 'FA 19'
+        WHEN (exam_date BETWEEN '2020-01-01' AND '2020-03-13') THEN 'SP 20'
+        WHEN (exam_date BETWEEN '2020-08-01' AND '2020-12-20') THEN 'FA 20'
+        WHEN (exam_date BETWEEN '2021-01-01' AND '2021-04-30') THEN 'SP 21'
+    END;
+
+
+
+
 
 
 ----Update final_exams to indicate final_exam status
@@ -56,6 +69,8 @@ UPDATE ods_exams
 		WHEN (exam_date = '2019-11-22' AND subject = 'GBA') THEN true --Since GBAs finals are taken before final schedule. This happened only once in the dataset
 		ELSE FALSE
 	END;
+
+
 ----+------+------+----+
 
 ----+--Creating SQL VIEWS for analysis----+--
