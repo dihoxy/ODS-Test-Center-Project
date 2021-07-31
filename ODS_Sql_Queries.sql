@@ -150,5 +150,21 @@ WHERE (EXTRACT (MONTH FROM exam_date) = 12 --Fall '19 Finals Month
 		  AND EXTRACT (DAY FROM exam_date) >= 26) --Spring '21 Finals Day
 
 
+----Daily percentage change in exams
+WITH lead_test AS(
+    SELECT exam_date, tot_num_tests, lead(tot_num_tests) over (order by exam_date) AS lead_day
+FROM ods_time_series_v02)
+
+SELECT ods_time_series_v02.exam_date, ods_time_series_v02.tot_num_tests, lead_test.lead_day,
+       ROUND((lead_test.lead_day - ods_time_series_v02.tot_num_tests) / lead_test.lead_day:: float *100) AS
+           percent_change
+
+FROM ods_time_series_v02
+
+JOIN lead_test
+
+ON ods_time_series_v02.exam_date = lead_test.exam_date
+
+
 
 
