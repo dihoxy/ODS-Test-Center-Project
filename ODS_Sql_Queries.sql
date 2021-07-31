@@ -1,3 +1,5 @@
+--+--++--+
+
 ----+--Loading Data----+--
 \copy public."ods_exams"("index", "subject","section","exam_date","proctor","room_number","start_time","end_time","actual_start","actual_end","first_entered","fileUploaded","received_as_paper_copy","rescheduled","breaks_during_exams","extra_time_1.50x","extra_time_2.00x","makeup_acoommodation","noScantronExam","readerforExams","allotted_time","actual_time","exam_cancelled","no_show","requested_in_advance","name_of_day") FROM 'C:\Users\musia\DataAnalysis\Projects\ODS Test Center\ODS-Test-Center-Project-main\postgres_export_ods_v06.csv' DELIMITER ','CSV HEADER;
 
@@ -44,7 +46,8 @@ ALTER TABLE ods_exams
 
 ----Add a new column to indicate Fall, Spring, or summer
 ALTER TABLE ods_exams
-    ADD COLUMN semester CHAR(2);
+    ADD COLUMN semester CHAR(5);
+
 UPDATE ods_exams
     SET semester = CASE
         WHEN (exam_date BETWEEN '2019-05-01' AND '2019-08-03') THEN 'SU 19'
@@ -78,6 +81,8 @@ UPDATE ods_exams
 --Here I join two common table expressions(CTE) to query the number of exams for each 
 --date for both day and night time testing respectively
 --I wonder if there is a more efficient way to do this...
+
+--Fixed issue with nulls by using case statements to input 0 where there weren't any night exams
 CREATE VIEW ods_time_series_V02 AS(
 WITH nightExams AS (
 	SELECT exam_date, COUNT(start_time) AS cnt_night_tests
@@ -88,25 +93,17 @@ dayExams AS (
 	SELECT exam_date, COUNT(start_time) AS cnt_day_tests
 	FROM ods_exams
 	WHERE CAST(start_time AS TIME) < '16:45:00'
-	GROUP BY exam_date)	
-SELECT dayExams.exam_date, dayExams.cnt_day_tests, nightExams.cnt_night_tests,
-	(dayExams.cnt_day_tests + nightExams.cnt_night_tests) AS tot_num_tests
+	GROUP BY exam_date)
+SELECT dayExams.exam_date, dayExams.cnt_day_tests AS cnt_day, CASE WHEN nightExams.cnt_night_tests IS NULL THEN 0 ELSE
+                                                                                        nightExams.cnt_night_tests END AS cnt_night,
+       CASE WHEN (dayExams.cnt_day_tests + cnt_night_tests) IS NOT NULL THEN (dayExams.cnt_day_tests + cnt_night_tests) ELSE dayExams.cnt_day_tests
+        END AS tot_num_tests
 FROM dayExams
 FULL OUTER JOIN nightExams
 ON dayExams.exam_date = nightExams.exam_date
 GROUP BY dayExams.exam_date, dayExams.cnt_day_tests, nightExams.cnt_night_tests
 ORDER BY dayExams.exam_date ASC);
 
-
----Create View to add in semester indicator
---I use a left join to join the view ods_time_series and ods_exams to get the column
---I also make good use of aliasing here
-CREATE VIEW series AS (
-SELECT series.exam_date, series.tot_num_tests, series.cnt_day_tests, series.cnt_night_tests,
-       ods.semester
-FROM ods_time_series AS series
-LEFT JOIN ods_exams AS ods
-ON series.exam_date = ods.exam_date);
 
 ----Final Exams View
 CREATE VIEW final_exam AS (

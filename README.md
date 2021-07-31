@@ -73,6 +73,10 @@
 ***
 *07/30/2021*
 
-1.Add column 'semester' to indicate semester and year
-
-2.Integrated project into Pycharm IDE
+1. Add column 'semester' to indicate semester and year. 
+2. Integrated project into Pycharm IDE
+***
+*07/31/2021*
+1. Fixed issue with incorrect results in ods_time_series
+2. Changed name of view to ods_time_series_v02
+3. 
