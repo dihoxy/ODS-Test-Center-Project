@@ -105,6 +105,16 @@ GROUP BY dayExams.exam_date, dayExams.cnt_day_tests, nightExams.cnt_night_tests
 ORDER BY dayExams.exam_date ASC);
 
 
+----Time data grouping by time
+CREATE VIEW subject_time_data AS(
+    SELECT subject, semester, round(avg(allotted_time), 2) AS avg_allottment,
+       round(avg(actual_time), 2) AS avg_actual_time,
+       min(actual_time) AS min_actual_time, max(actual_time) AS max_actual_time
+FROM ods_exams
+WHERE actual_time <> 0
+GROUP BY subject, semester
+ORDER BY semester)
+
 ----Final Exams View
 CREATE VIEW final_exam AS (
 	SELECT *
@@ -118,6 +128,7 @@ CREATE VIEW reg_exams AS (
 	FROM ods_exams
 	WHERE final_exam = False
 	ORDER BY exam_date);
+
 
 ----+------+------+------+
 
@@ -154,15 +165,11 @@ WHERE (EXTRACT (MONTH FROM exam_date) = 12 --Fall '19 Finals Month
 WITH lead_test AS(
     SELECT exam_date, tot_num_tests, lead(tot_num_tests) over (order by exam_date) AS lead_day
 FROM ods_time_series_v02)
-
 SELECT ods_time_series_v02.exam_date, ods_time_series_v02.tot_num_tests, lead_test.lead_day,
        ROUND((lead_test.lead_day - ods_time_series_v02.tot_num_tests) / lead_test.lead_day:: float *100) AS
            percent_change
-
 FROM ods_time_series_v02
-
 JOIN lead_test
-
 ON ods_time_series_v02.exam_date = lead_test.exam_date
 
 
