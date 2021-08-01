@@ -104,6 +104,9 @@ ON dayExams.exam_date = nightExams.exam_date
 GROUP BY dayExams.exam_date, dayExams.cnt_day_tests, nightExams.cnt_night_tests
 ORDER BY dayExams.exam_date ASC);
 
+----Creating View of summary data for each semester
+--No shows and exam_cancelleds removed
+--Note here that I use brackets to indicate that I am using the same query to create multiple views(i.e., fall, spring, ect)
 
 ----Time data grouping by course
 CREATE VIEW subject_time_data AS(
@@ -161,16 +164,6 @@ WHERE (EXTRACT (MONTH FROM exam_date) = 12 --Fall '19 Finals Month
 		  AND EXTRACT (DAY FROM exam_date) >= 26) --Spring '21 Finals Day
 
 
-----Daily percentage change in exams
-WITH lead_test AS(
-    SELECT exam_date, tot_num_tests, lead(tot_num_tests) over (order by exam_date) AS lead_day
-FROM ods_time_series_v02)
-SELECT ods_time_series_v02.exam_date, ods_time_series_v02.tot_num_tests, lead_test.lead_day,
-       ROUND((lead_test.lead_day - ods_time_series_v02.tot_num_tests) / lead_test.lead_day:: float *100) AS
-           percent_change
-FROM ods_time_series_v02
-JOIN lead_test
-ON ods_time_series_v02.exam_date = lead_test.exam_date
 
 
 ----Summary data for regular semester exams grouped by semester
@@ -188,5 +181,13 @@ WHERE actual_time <> 0 and final_exam = True --Filter for finals and filter out 
 GROUP BY semester
 
 
+----percent change in fields across semesters
+SELECT sp_20.month, sp_20.total_num_of_reg_exams AS sp_num_exams, sp_21.total_num_of_reg_exams AS sp_21_exams,
+       ROUND((sp_20.total_num_of_reg_exams - sp_21.total_num_of_reg_exams)::numeric / sp_21.total_num_of_reg_exams, 2) *100 AS percent_change
+---add in differences between allottment and time columns
+FROM sp_20
 
+JOIN sp_21 on
+
+sp_20.month = sp_21.month
 
