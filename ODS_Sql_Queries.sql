@@ -173,5 +173,20 @@ JOIN lead_test
 ON ods_time_series_v02.exam_date = lead_test.exam_date
 
 
+----Summary data for regular semester exams grouped by semester
+SELECT semester, count(*) total_num_of_reg_exams, sum(allotted_time) as total_allotment_minutes_for_month, round(avg(allotted_time),2) as avg_allotment,
+       sum(actual_time) as total_actual_minutes_for_month, round(avg(actual_time),2) as avg_actual_time
+FROM ods_exams
+WHERE actual_time <> 0 and final_exam = FALSE --Filter for regular semester exams and filter out no_shows, and cancelled
+GROUP BY semester
+
+----Summary data for regular semester exams grouped by semester
+SELECT semester, count(*) total_num_of_reg_exams, sum(allotted_time) as total_allotment_minutes_for_month, round(avg(allotted_time),2) as avg_allotment,
+       sum(actual_time) as total_actual_minutes_for_month, round(avg(actual_time),2) as avg_actual_time
+FROM ods_exams
+WHERE actual_time <> 0 and final_exam = True --Filter for finals and filter out no_shows, and cancelled
+GROUP BY semester
+
+
 
 
