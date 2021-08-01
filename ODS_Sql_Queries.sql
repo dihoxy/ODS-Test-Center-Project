@@ -105,7 +105,7 @@ GROUP BY dayExams.exam_date, dayExams.cnt_day_tests, nightExams.cnt_night_tests
 ORDER BY dayExams.exam_date ASC);
 
 
-----Time data grouping by time
+----Time data grouping by course
 CREATE VIEW subject_time_data AS(
     SELECT subject, semester, round(avg(allotted_time), 2) AS avg_allottment,
        round(avg(actual_time), 2) AS avg_actual_time,
