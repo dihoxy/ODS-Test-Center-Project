@@ -79,4 +79,6 @@
 *07/31/2021*
 1. Fixed issue with incorrect results in ods_time_series
 2. Changed name of view to ods_time_series_v02
-3. 
+***
+08/02/2021
+1. Summary displayed in Excel workbook with Pivot Table
