@@ -186,8 +186,6 @@ SELECT sp_20.month, sp_20.total_num_of_reg_exams AS sp_num_exams, sp_21.total_nu
        ROUND((sp_20.total_num_of_reg_exams - sp_21.total_num_of_reg_exams)::numeric / sp_21.total_num_of_reg_exams, 2) *100 AS percent_change
 ---add in differences between allottment and time columns
 FROM sp_20
-
 JOIN sp_21 on
-
 sp_20.month = sp_21.month
 
