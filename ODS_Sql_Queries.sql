@@ -81,16 +81,16 @@ UPDATE ods_exams
 --date for both day and night time testing respectively
 --I wonder if there is a more efficient way to do this...
 --Fixed issue with nulls by using case statements to input 0 where there weren't any night exams
-CREATE VIEW ods_time_series_V02 AS(
+CREATE VIEW ods_time_series_V03 AS(
 WITH nightExams AS (
 	SELECT exam_date, COUNT(start_time) AS cnt_night_tests
 	FROM ods_exams
-	WHERE CAST(start_time AS TIME) > '16:45:00'
+	WHERE CAST(start_time AS TIME) > '16:45:00' AND no_show = FALSE AND exam_cancelled = FALSE
 	GROUP BY exam_date),
 dayExams AS (
 	SELECT exam_date, COUNT(start_time) AS cnt_day_tests
 	FROM ods_exams
-	WHERE CAST(start_time AS TIME) < '16:45:00'
+	WHERE CAST(start_time AS TIME) < '16:45:00' AND no_show = FALSE AND exam_cancelled = FALSE
 	GROUP BY exam_date)
 SELECT dayExams.exam_date, dayExams.cnt_day_tests AS cnt_day, CASE WHEN nightExams.cnt_night_tests IS NULL THEN 0 ELSE
                                                                                         nightExams.cnt_night_tests END AS cnt_night,
