@@ -130,6 +130,50 @@ CREATE VIEW reg_exams AS (
 	ORDER BY exam_date);
 
 
+
+----Creating View of percentage actual time used by date
+CREATE VIEW Percent_used AS (
+WITH percent_used_2_0 AS(
+    SELECT a.exam_date, round(a.actual_time * 100/a.allotted_time,2)  AS percent_used
+FROM ods_exams AS a
+WHERE "extra_time_2.00x" = 'Yes' AND exam_cancelled = False and no_show = FALSE),
+
+percent_used_1_5 AS(
+    SELECT b.exam_date, round(b.actual_time * 100/b.allotted_time,2)  AS percent_used
+FROM ods_exams AS b
+WHERE "extra_time_1.50x" = 'Yes' AND exam_cancelled = False and no_show = FALSE)
+
+SELECT ods_exams.exam_date, ROUND(avg(percent_used_1_5.percent_used),2) AS avg_percent_used_for_1_5x,
+       ROUND(avg(percent_used_2_0.percent_used),2) AS avg_percent_used_for_2_0x
+FROM ods_exams
+JOIN percent_used_2_0 ON
+ods_exams.exam_date = percent_used_2_0.exam_date
+JOIN percent_used_1_5 ON
+percent_used_2_0.exam_date = percent_used_1_5.exam_date
+GROUP BY ods_exams.exam_date
+ORDER BY ods_exams.exam_date
+------------------
+CREATE VIEW Percent_used_subject AS (
+WITH percent_used_2_0 AS(
+    SELECT a.subject, round(a.actual_time * 100/a.allotted_time,2)  AS percent_used
+FROM ods_exams AS a
+WHERE "extra_time_2.00x" = 'Yes' AND exam_cancelled = False and no_show = FALSE),
+
+percent_used_1_5 AS(
+    SELECT b.subject, round(b.actual_time * 100/b.allotted_time,2)  AS percent_used
+FROM ods_exams AS b
+WHERE "extra_time_1.50x" = 'Yes' AND exam_cancelled = False and no_show = FALSE)
+
+SELECT ods_exams.subject, ROUND(avg(percent_used_1_5.percent_used),2) AS avg_percent_used_for_1_5x,
+       ROUND(avg(percent_used_2_0.percent_used),2) AS avg_percent_used_for_2_0x
+FROM ods_exams
+JOIN percent_used_2_0 ON
+ods_exams.subject = percent_used_2_0.subject
+JOIN percent_used_1_5 ON
+percent_used_2_0.subject = percent_used_1_5.subject
+GROUP BY ods_exams.subject
+ORDER BY ods_exams.subject)
+
 ----+------+------+------+
 
 ----+--SQL Queries----+--
