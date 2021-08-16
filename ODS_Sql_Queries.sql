@@ -28,7 +28,12 @@ SET DATA TYPE bigint;
 DELETE FROM ods_exams
 WHERE "subject" = 'TEST';
 
-
+-----Add percent used column
+ALTER TABLE ods_exams
+ADD COLUMN percent_time_used FLOAT;
+UPDATE ods_exams
+SET percent_time_used = ROUND(actual_time*100/ods_exams.allotted_time, 2)
+WHERE no_show = FALSE AND exam_cancelled = FALSE
 
 --Drop 'fileUploaded' since it is largely irrelevant to the business objective
 ALTER TABLE ods_exams
